@@ -7,6 +7,8 @@ RUN apt-get update && \
     curl http://mafft.cbrc.jp/alignment/software/mafft-7.310-with-extensions-src.tgz > /tmp/mafft-7.310-with-extensions-src.tgz && \
     cd /tmp && tar zxvf mafft-7.310-with-extensions-src.tgz && \
     cd /tmp/mafft-7.310-with-extensions/core && \
+    sed -e "s/^PREFIX = \/usr\/local/PREFIX = \/opt/" Makefile > Makefile.tmp && \
+    mv Makefile.tmp Makefile && \
     make clean && make && make install && \
     cd /tmp && rm -rf mafft-7.310-with-extensions && \
     apt-get purge -y build-essential curl && \
