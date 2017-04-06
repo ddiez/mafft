@@ -1,27 +1,18 @@
 FROM debian:testing
 MAINTAINER Diego Diez <diego10ruiz@gmail.com>
 
-# Update the repository sources list.
-RUN apt-get update
+## Install MAFFT.
+RUN apt-get update && \
+    apt-get install -y build-essential curl && \
+    curl http://mafft.cbrc.jp/alignment/software/mafft-7.310-with-extensions-src.tgz > /tmp/mafft-7.310-with-extensions-src.tgz && \
+    cd /tmp && tar zxvf mafft-7.310-with-extensions-src.tgz && \
+    cd /tmp/mafft-7.310-with-extensions/core && \
+    make clean && make && make install && \
+    cd /tmp && rm -rf mafft-7.310-with-extensions && \
+    apt-get purge -y build-essential curl && \
+    apt-get autoremove -y
 
-## Add general tools.
-RUN apt-get install -y build-essential
-
-## Install MEME suite.
-# Download and untar.
-ADD http://mafft.cbrc.jp/alignment/software/mafft-7.310-with-extensions-src.tgz /tmp
-RUN cd /tmp && tar zxvf mafft-7.310-with-extensions-src.tgz
-
-# Compile.
-WORKDIR /tmp/mafft-7.310-with-extensions/core
-RUN make clean
-RUN make
-RUN make install
-
-# Cleanup.
-#WORKDIR /tmp
-#RUN rm -rf mafft-7.310-with-extensions
-
+## Set up environment.
 # Add /opt/bin to PATH.
 ENV PATH /opt/bin:$PATH
 
