@@ -1,16 +1,18 @@
 FROM debian:testing
 MAINTAINER Diego Diez <diego10ruiz@gmail.com>
 
+ENV VERSION=7.313
+
 ## Install MAFFT.
 RUN apt-get update && \
     apt-get install -y build-essential curl && \
-    curl http://mafft.cbrc.jp/alignment/software/mafft-7.310-with-extensions-src.tgz > /tmp/mafft-7.310-with-extensions-src.tgz && \
-    cd /tmp && tar zxvf mafft-7.310-with-extensions-src.tgz && \
-    cd /tmp/mafft-7.310-with-extensions/core && \
+    curl http://mafft.cbrc.jp/alignment/software/mafft-$VERSION-with-extensions-src.tgz > /tmp/mafft-$VERSION-with-extensions-src.tgz && \
+    cd /tmp && tar zxvf mafft-$VERSION-with-extensions-src.tgz && \
+    cd /tmp/mafft-$VERSION-with-extensions/core && \
     sed -e "s/^PREFIX = \/usr\/local/PREFIX = \/opt/" Makefile > Makefile.tmp && \
     mv Makefile.tmp Makefile && \
     make clean && make && make install && \
-    cd /tmp && rm -rf mafft-7.310-with-extensions && \
+    cd /tmp && rm -rf mafft-$VERSION-with-extensions && \
     apt-get purge -y build-essential curl && \
     apt-get autoremove -y
 
