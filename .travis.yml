@@ -1,0 +1,21 @@
+services:
+  - docker
+
+install:
+  - docker build -t ddiez/mafft .
+
+before_script:
+  - git clone https://github.com/ddiez/dataset.git
+
+script:
+  - docker run -v $(pwd):/home/biodev ddiez/mafft mafft dataset/fasta/uniprot.fasta || true
+  - docker run ddiez/mafft
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+      docker push ddiez/mafft;
+      VERSION=`docker run ddiez/mafft printenv VERSION`;
+      docker tag ddiez/mafft ddiez/mafft:$VERSION;
+      docker push ddiez/mafft:$VERSION;
+    fi
