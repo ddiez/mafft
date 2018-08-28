@@ -1,12 +1,12 @@
 FROM debian:testing
 MAINTAINER Diego Diez <diego10ruiz@gmail.com>
 
-ENV VERSION=7.313
+ENV VERSION=7.407
 
 ## Install MAFFT.
 RUN apt-get update && \
     apt-get install -y build-essential curl && \
-    curl http://mafft.cbrc.jp/alignment/software/mafft-$VERSION-with-extensions-src.tgz > /tmp/mafft-$VERSION-with-extensions-src.tgz && \
+    curl https://mafft.cbrc.jp/alignment/software/mafft-$VERSION-with-extensions-src.tgz > /tmp/mafft-$VERSION-with-extensions-src.tgz && \
     cd /tmp && tar zxvf mafft-$VERSION-with-extensions-src.tgz && \
     cd /tmp/mafft-$VERSION-with-extensions/core && \
     sed -e "s/^PREFIX = \/usr\/local/PREFIX = \/opt/" Makefile > Makefile.tmp && \
